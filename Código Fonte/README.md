@@ -1,2 +1,2 @@
 # 7-Beats-Project
-Código fonte do aplicativo android.
+Código fonte do aplicativo android e server.
