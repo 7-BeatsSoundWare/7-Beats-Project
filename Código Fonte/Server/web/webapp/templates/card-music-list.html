@@ -1,0 +1,13 @@
+<ul ng-show="albumSelecionado" class="collection with-header" id="albumSelecionado">
+    <li class="collection-header blue accent-1">
+        <h4>{{albumSelecionado.nome}}</h4>
+    </li>
+    <li class="collection-item" ng-repeat="musica in albumSelecionado.musicas">       
+        <div>
+            {{musica.nome}}
+            <a href="javascript:void(0)" class="secondary-content" music-player="play" add-song="musica">
+                <i class="mdi-av-play-arrow"></i>
+            </a>
+        </div>
+    </li>
+</ul>
