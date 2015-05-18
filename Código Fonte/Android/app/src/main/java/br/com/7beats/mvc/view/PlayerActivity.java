@@ -28,6 +28,7 @@ public class PlayerActivity extends ActionBarActivity implements View.OnClickLis
     private  Intent playIntent;
     private  boolean musicBound = false;
     PlayerManager playerManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
