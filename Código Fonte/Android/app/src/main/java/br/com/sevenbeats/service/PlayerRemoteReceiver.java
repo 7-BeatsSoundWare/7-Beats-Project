@@ -1,4 +1,4 @@
-package vuziq.s7venbeats.service;
+package br.com.sevenbeats.service;
 
 
 import android.content.BroadcastReceiver;
@@ -6,7 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
-import vuziq.s7venbeats.mvc.controller.PlayerManager;
+import br.com.sevenbeats.mvc.controller.PlayerManager;
+
 
 public class PlayerRemoteReceiver extends BroadcastReceiver {
 

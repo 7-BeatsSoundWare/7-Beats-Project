@@ -1,11 +1,12 @@
-package vuziq.s7venbeats.notification;
+package br.com.sevenbeats.notification;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import vuziq.s7venbeats.mvc.view.PlayerActivity;
+import br.com.sevenbeats.mvc.view.PlayerActivity;
+
 
 /**
  * Created by diogojayme on 5/13/15.
