@@ -1,12 +1,15 @@
 package br.com.sevenbeats.mvc.view;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -21,7 +24,7 @@ import br.com.sevenbeats.mvc.model.Song;
 import br.com.sevenbeats.service.MusicService;
 
 
-public class PlayerActivity extends Activity implements View.OnClickListener, PlayerManager.OnSeekBarUpdateListener {
+public class PlayerActivity extends Activity implements View.OnClickListener {
 
     private  ImageButton next;
     private  ImageButton previous;
@@ -75,27 +78,13 @@ public class PlayerActivity extends Activity implements View.OnClickListener, Pl
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        if (musicBound) {
-//            unbindService(musicConnection);
-//            musicBound = false;
-//        }
-    }
-
-    @Override
     public void onClick(View v) {
         if(v.getId() == R.id.play_pause){
-           onPlayClick();
+            onPlayClick();
         }else if(v.getId() == R.id.next){
             onNextClick();
         }else if(v.getId() == R.id.previous){
-          onPreviousClick();
+            onPreviousClick();
         }
 
     }
@@ -136,8 +125,50 @@ public class PlayerActivity extends Activity implements View.OnClickListener, Pl
     }
 
     @Override
-    public void onSeekbarUpdate(int progress) {
-        seekBar.setProgress(progress);
+    protected void onStart() {
+        super.onStart();
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(PlayerActivity.this).registerReceiver(musicBroadcastReceiver, new IntentFilter(PlayerManager.BROADCAST_REGISTER_NAME));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(musicBroadcastReceiver);
+//        if (musicBound) {
+//            unbindService(musicConnection);
+//            musicBound = false;
+//        }
+    }
+
+    private BroadcastReceiver musicBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String extra = intent.getStringExtra(PlayerManager.EXTRAS);
+            switch (extra){
+                case PlayerManager.PLAY:
+                    //do something
+                    break;
+                case PlayerManager.PAUSE:
+                    // do something
+                    break;
+                case PlayerManager.BUFFERING:
+                    String buffer = intent.getStringExtra(PlayerManager.BUFFERING);
+                    seekBar.setProgress(Integer.valueOf(buffer));
+                    break;
+                case PlayerManager.NEXT:
+
+                    break;
+                case PlayerManager.PREVIOUS:
+
+                    break;
+            }
+        }
+    };
 
 }
