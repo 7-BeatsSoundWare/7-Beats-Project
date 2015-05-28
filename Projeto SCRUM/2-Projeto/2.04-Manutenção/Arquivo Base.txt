@@ -1,0 +1,7 @@
+O nome arquivos devem seguir o seguinte formato:
+
+7BSW-"nome do arquivo que melhor descrevelo".ext
+
+Sendo:
+7BSW = 7 Beats Sound Ware
+ext = extenção do arquivo
