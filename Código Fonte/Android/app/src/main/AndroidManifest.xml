@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="br.com.sevenbeats" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
-            android:name=".mvc.view.PlayerActivity"
-            android:label="@string/app_name" >
+            android:name=".mvc.view.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +27,15 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".mvc.controller.player.service.MusicService" >
 
-
-        <service android:name=".service.MusicService">
-            <!-- nenhuma outra aplciação vai se comunicar  com este service, vai rodar localmente-->
+            <!-- nenhuma outra aplciação vai se comunicar  com este service, vai rodar localmente -->
         </service>
+
+        <activity
+            android:name=".mvc.view.PlayerActivity"
+            android:label="@string/title_activity_player" >
+        </activity>
     </application>
 
 </manifest>

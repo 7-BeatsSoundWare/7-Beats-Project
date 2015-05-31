@@ -1,4 +1,4 @@
-package br.com.sevenbeats.notification;
+package br.com.sevenbeats.mvc.view.notification;
 
 import android.app.Notification;
 import android.app.PendingIntent;

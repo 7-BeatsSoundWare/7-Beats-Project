@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
+
     <LinearLayout
         android:id="@+id/player_controls"
         android:layout_width="match_parent"
@@ -20,36 +21,52 @@
             android:id="@+id/previous"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:layout_weight="0"
-            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_previous"
             style="@style/Base.Widget.AppCompat.ActionButton"/>
 
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/play_pause"
+        <RelativeLayout
+            android:id="@+id/player_play_pause_container"
             android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_weight="0"
-            fab:fab_shadow="true"
-            android:src="@drawable/ic_play"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginStart="32dp"
-            fab:fab_colorNormal="@color/colorRipple"
-            fab:fab_colorPressed="@color/colorRippleSelected"
-            fab:fab_colorRipple="@color/colorRippleAccent" />
+            android:layout_height="72dp">
+
+            <ProgressBar
+                android:id="@+id/player_loading"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/play_pause"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="visible"
+                fab:fab_shadow="true"
+                android:src="@drawable/ic_play"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginStart="32dp"
+                fab:fab_colorNormal="@color/colorRipple"
+                fab:fab_colorPressed="@color/colorRippleSelected"
+                fab:fab_colorRipple="@color/colorRippleAccent" />
+        </RelativeLayout>
+
 
         <ImageButton
             android:id="@+id/next"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:layout_weight="0"
+            android:layout_marginStart="16dp"
             android:src="@drawable/ic_next"
-            android:layout_marginBottom="6dp"
             style="@style/Base.Widget.AppCompat.ActionButton" />
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/player_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
@@ -63,6 +80,15 @@
         android:layout_marginBottom="16dp"
         android:background="#b4000000"
         android:layout_above="@+id/player_controls" />
+
+    <TextView
+        android:id="@+id/player_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/player_controls"
+        android:layout_marginBottom="22dp"
+        android:layout_marginStart="16dp"
+        android:text="00:00" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -100,5 +126,33 @@
         android:paddingRight="0dp"
         android:layout_above="@id/player_controls" />
 
+
+    <RelativeLayout
+        android:id="@+id/player_loading_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <TextView
+            android:id="@+id/player_loading_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textColor="#ff858585"
+            android:layout_margin="16dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="Carregando informações necessárias" />
+
+        <ProgressBar
+            android:id="@+id/player_loading_view"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/player_loading_text" />
+    </RelativeLayout>
 
 </RelativeLayout>

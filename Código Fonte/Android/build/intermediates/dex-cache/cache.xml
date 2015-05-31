@@ -2,32 +2,18 @@
 <items version="2" >
 
     <item
-        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-338b5841484f134a47a01e59c90036143f5149ca.jar" />
-    </item>
-    <item
-        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/library-2.4.0-8bcf962dd8ee2cb7c8adfe9530dcaf626f94f9c2.jar" />
-    </item>
-    <item
-        jar="/Users/diogojayme/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-cb78138b9e19c52f1e77888eb64cfc9e061b9d6f.jar" />
-    </item>
-    <item
         jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-75807a341340a863cb53135e2f59f38df67ab954.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/6.1.0/63735f48b82bcd24cdd33821342428252eb1ca5a/butterknife-6.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="63735f48b82bcd24cdd33821342428252eb1ca5a">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/butterknife-6.1.0-5d2a37bb99d8ecd55eb229a47b518a1aacfd4f55.jar" />
     </item>
     <item
         jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.3/classes.jar"
@@ -37,6 +23,34 @@
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-56dd45a237b0fb63205cb868d0451cd0ec9bf17d.jar" />
     </item>
     <item
+        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-338b5841484f134a47a01e59c90036143f5149ca.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/okhttp-2.4.0-5b4db9dc839a10ab5b919349a11cda3135e3359d.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/libs/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/gson-2.2.4-1a15f37b82a6e909425075b99e76500e878c769a.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/library-2.4.0-8bcf962dd8ee2cb7c8adfe9530dcaf626f94f9c2.jar" />
+    </item>
+    <item
         jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -44,11 +58,25 @@
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-b97b66b5ce4e4614c84498c7bd08235ef642cfa9.jar" />
     </item>
     <item
+        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/okio-1.4.0-684aaf9546d8ad2bb8f481e164ae4a3cab25695b.jar" />
+    </item>
+    <item
         jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.3.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="8c6ebb7d087d1a30bf84356bd2aecf85309fc024">
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-485a13cc202fa7fcb9c0500c8bae0b2a37460f9f.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-cb78138b9e19c52f1e77888eb64cfc9e061b9d6f.jar" />
     </item>
 
 </items>
