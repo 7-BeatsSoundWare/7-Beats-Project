@@ -8,10 +8,11 @@ import java.util.Collection;
 
 import br.com.sevenbeats.mvc.interfaces.model.GenericModel;
 import br.com.sevenbeats.objects.Album;
+import br.com.sevenbeats.objects.ResponseHeader;
 import br.com.sevenbeats.objects.Song;
 
 
-public class ObjectParse implements Response{
+public class ObjectParse{
 
     GenericModel model;
 
@@ -24,12 +25,7 @@ public class ObjectParse implements Response{
      * comunicação entre camada de Domain e MVC
      *
      * */
-    public ObjectParse(GenericModel model){
-        if(model == null){
-            throw new NullPointerException("Domain need model != null");
-        }
-
-        this.model = model;
+    public ObjectParse(){
     }
 
     /*
@@ -51,9 +47,10 @@ public class ObjectParse implements Response{
      * mensagem de erro caso um erro de parse ocorra
      *
      * */
-    public Object convertJsonToObject(final String json, final int objectType) {
+    public ResponseHeader convertJsonToObject(final String json, final int objectType) {
         Type collectionType = null;
         Object data;
+        ResponseHeader header;
 
         switch (objectType) {
             case SONG:
@@ -66,28 +63,13 @@ public class ObjectParse implements Response{
 
         try {
             data = new Gson().fromJson(json, collectionType);
-            onResponse(data, true);
+            header = new ResponseHeader(data, false);
         }catch (Exception e){
             data = gsonParseErrorMessage + objectType;
-            onResponse(data, false);
+            header = new ResponseHeader(data, true);
         }
 
-        return data;
-    }
-
-    /**
-     * Domain envia uma mensagem de sucesso ou falha
-     * @param response em caso do model precisar do objeto na resposta
-     * @param success mensagem de sucesso ou falha em caso do parse falhar
-     *
-     * */
-    @Override
-    public void onResponse(Object response, boolean success) {
-        if(success){
-            model.onSuccess(response);
-        }else{
-            model.onFailed(response);
-        }
+        return header;
     }
 
 }

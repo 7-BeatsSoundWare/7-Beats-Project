@@ -5,5 +5,6 @@ package br.com.sevenbeats.mvc.interfaces.model;
  * com intuido de permitir qualquer classe implementa Generic Model instanciar a camada de Domínio (package domain)
  * */
 public interface GenericModel extends PreparedModel {
-    void onModelDestroy();
+    void executeRequestedMethod(String methodName);
+    void setRequestedMethodComplete(Object response);
 }

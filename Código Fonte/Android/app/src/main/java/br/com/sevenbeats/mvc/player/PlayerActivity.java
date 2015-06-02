@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
@@ -23,14 +24,14 @@ import java.util.List;
 import br.com.sevenbeats.R;
 import br.com.sevenbeats.mvc.player.service.MusicBinder;
 import br.com.sevenbeats.mvc.player.service.MusicService;
+import br.com.sevenbeats.objects.Album;
 import br.com.sevenbeats.objects.Song;
-import br.com.sevenbeats.utils.MvcAnnotations;
-import br.com.sevenbeats.utils.ReflectionAnnotation;
+import br.com.sevenbeats.utils.annotation.MvcPattern;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-@MvcAnnotations("VIEW") public class PlayerActivity extends Activity {
+@MvcPattern("VIEW") public class PlayerActivity extends Activity {
     private MusicBinder mBinder;
     private PlayerController mPlayerController;
 
@@ -54,19 +55,8 @@ import butterknife.OnClick;
 
     private void initActivityData(){
         mPlayerController = new PlayerController(this);
-        mPlayerController.getAlbum();
-        mPlayerController.getSongs();
-    }
-
-
-    @ReflectionAnnotation("Method reflection")
-    private void getAlbum(Object data, boolean error){
-        System.out.println();
-    }
-
-    @ReflectionAnnotation("Method reflection")
-    private void getSongs(Object data, boolean error){
-        System.out.println();
+        mPlayerController.request("onAlbum");
+        mPlayerController.request("onSongs");
     }
 
     @Override protected void onStart() {
@@ -81,7 +71,6 @@ import butterknife.OnClick;
     @Override protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(PlayerActivity.this).unregisterReceiver(musicViewUpdaterBroadcastReceiver);
-        mPlayerController.onControllerDestroy();
         ButterKnife.reset(this);
     }
 
@@ -165,6 +154,11 @@ import butterknife.OnClick;
         }
     }
 
+    private void updateView(){
+        setSongChanged();
+        changePLayPause(mBinder.getPlayer().isPlaying());
+    }
+
     private ServiceConnection musicConnection = new ServiceConnection() {
 
         @Override public void onServiceConnected(ComponentName name, IBinder service) {
@@ -181,11 +175,6 @@ import butterknife.OnClick;
         @Override public void onServiceDisconnected(ComponentName name) {
         }
     };
-
-    private void updateView(){
-        setSongChanged();
-        changePLayPause(mBinder.getPlayer().isPlaying());
-    }
 
     private BroadcastReceiver musicViewUpdaterBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -221,32 +210,41 @@ import butterknife.OnClick;
         }
     };
 
-    /***
-     * Habilita ou desabilita componenets da activity
-     *
-     */
-    @ReflectionAnnotation("Method reflection")
-    public void onView(boolean prepared, boolean hasError) {
+    @SuppressWarnings("unused")
+    public  void onAlbum(Album response, Boolean error){
+        Log.d("MVC", "Updating view from method caller >>> onALbum");
+        System.out.println();
+    }
+
+    @SuppressWarnings("unused")
+    public  void onSongs(ArrayList<Song> response, Boolean error){
+        Log.d("MVC", "Updating view from method caller >>> onSongs");
+        System.out.println();
+    }
+
+    @SuppressWarnings("unused")
+    public void onView(Boolean prepared, Boolean hasError) {
+        Log.d("MVC", "Updating view from method caller >>> onView");
         setViewEnabled(prepared);
         setNextEnabled(prepared);
         setSeekBarEnabled(prepared);
         setPreviousEnabled(prepared);
         setPlayPauseEnabled(prepared);
-        //TODO nesse contexto podemos tirar o trabalho do service de atualizar a view,
-        //TODO pois agora podemos passar o service para o model gerenciar e enviar as
-        //TODO respectivas mensagens ao controle
-        if (prepared) {
-            //Nesse caso dessa activity, passamos o trabalho de atualizar a view para o service, mas mesmo assim,
-            //somente quando o controle disse que está preparada é que o service iniciará
-            //o metodo bindService irá iniciar quando a view e os dados estiverem carregados
-            if(musicConnection != null) {
-                //Se o usuário entrou e saiu então o service não poderá ser iniciado
-                Intent i = new Intent(this, MusicService.class);
-                startService(i);
-                bindService(new Intent(this, MusicService.class), musicConnection, Context.BIND_AUTO_CREATE);
-            }
+
+        if (prepared && musicConnection != null) {
+            //controller avisa quando o service deverá começar a ser executado
+            Intent i = new Intent(this, MusicService.class);
+            startService(i);
+            bindService(new Intent(this, MusicService.class), musicConnection, Context.BIND_AUTO_CREATE);
         }
 
         setErrorViewEnabled(hasError);
     }
+
+
+    public static final String sOnAlbum = "onAlbum";
+    public static final String sOnSong = "onSongs";
+    public static final String sOnView = "onView";
+
+
 }
