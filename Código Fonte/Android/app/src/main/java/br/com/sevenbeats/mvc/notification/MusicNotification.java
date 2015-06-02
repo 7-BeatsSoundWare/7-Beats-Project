@@ -1,11 +1,11 @@
-package br.com.sevenbeats.mvc.view.notification;
+package br.com.sevenbeats.mvc.notification;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import br.com.sevenbeats.mvc.view.PlayerActivity;
+import br.com.sevenbeats.mvc.player.PlayerActivity;
 
 
 /**

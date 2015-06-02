@@ -4,10 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
-import br.com.sevenbeats.domain.objects.Album;
-import br.com.sevenbeats.domain.objects.Song;
-import br.com.sevenbeats.mvc.model.GenericModel;
+import br.com.sevenbeats.mvc.interfaces.model.GenericModel;
+import br.com.sevenbeats.objects.Album;
+import br.com.sevenbeats.objects.Song;
 
 
 public class ObjectParse implements Response{
@@ -56,7 +57,7 @@ public class ObjectParse implements Response{
 
         switch (objectType) {
             case SONG:
-                collectionType = new TypeToken<Song>(){}.getType();
+                collectionType = new TypeToken<Collection<Song>>(){}.getType();
                 break;
             case ALBUM:
                 collectionType = new TypeToken<Album>(){}.getType();

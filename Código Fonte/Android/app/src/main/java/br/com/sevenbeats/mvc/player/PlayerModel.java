@@ -1,26 +1,25 @@
-package br.com.sevenbeats.mvc.model.player;
+package br.com.sevenbeats.mvc.player;
 
-import br.com.sevenbeats.mvc.model.GenericModel;
-import br.com.sevenbeats.utils.SevenBeatsAnnotations;
+import br.com.sevenbeats.mvc.interfaces.model.GenericModel;
+import br.com.sevenbeats.utils.MvcAnnotations;
 import br.com.sevenbeats.domain.Connection;
 import br.com.sevenbeats.domain.ObjectParse;
-import br.com.sevenbeats.mvc.controller.player.Controller;
 
 /**
  * Created by diogojayme on 5/31/15.
  */
-@SevenBeatsAnnotations("MODEL") public class Model implements GenericModel {
-    Controller mController;
+@MvcAnnotations("MODEL") public class PlayerModel implements GenericModel {
+    PlayerController mPlayerController;
 
     /**
      * Recebe o listener de quem chamou esse metodo
      * Executa em uma thread secundária
      *
      * */
-    public Model(Controller controller){
+    public PlayerModel(PlayerController playerController){
         //TODO somente um controller pode instanciar essa classe
-        if(controller == null){throw new NullPointerException("Controller == null");}
-        mController = controller;
+        if(playerController == null){throw new NullPointerException("Controller == null");}
+        mPlayerController = playerController;
         onPreparing();
     }
 
@@ -31,21 +30,32 @@ import br.com.sevenbeats.mvc.controller.player.Controller;
      * para o destinatário
      *
      * */
-    public void getData(){
+    public void getAlbum(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 @SuppressWarnings("unchecked")
-                ObjectParse parse = new ObjectParse(Model.this);
-                parse.convertJsonToObject(Connection.getStreamContent("http://69.28.84.155:8080/rest/musicas", null), ObjectParse.SONG);
-                parse.convertJsonToObject(Connection.getStreamContent("http://69.28.84.155:8080/rest/albuns/id/1", null), ObjectParse.ALBUM);
+                ObjectParse parse = new ObjectParse(PlayerModel.this);
+                parse.convertJsonToObject(Connection.getStreamContent("http://69.28.84.155:8080/7beats/rest/albuns/id/1", null), ObjectParse.ALBUM);
+            }
+        }).start();
+    }
+
+
+    public void getSongs(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                @SuppressWarnings("unchecked")
+                ObjectParse parse = new ObjectParse(PlayerModel.this);
+                parse.convertJsonToObject(Connection.getStreamContent("http://69.28.84.155:8080/7beats/rest/musicas", null), ObjectParse.SONG);
             }
         }).start();
     }
 
     @Override public void onPreparing(){
-        mController.setError(false);
-        mController.setViewPrepared(false);
+        mPlayerController.setError(false);
+        mPlayerController.setViewPrepared(false);
     }
 
     /**
@@ -57,8 +67,8 @@ import br.com.sevenbeats.mvc.controller.player.Controller;
      *
      * */
     @Override public void onSuccess(Object response){
-        mController.setError(false);
-        mController.setViewPrepared(true);
+        mPlayerController.setError(false);
+        mPlayerController.setViewPrepared(true);
     }
 
     /**
@@ -70,12 +80,12 @@ import br.com.sevenbeats.mvc.controller.player.Controller;
      *
      * */
     @Override public void onFailed(Object response){
-        mController.setError(true);
-        mController.setViewPrepared(false);
+        mPlayerController.setError(true);
+        mPlayerController.setViewPrepared(false);
     }
 
     @Override
     public void onModelDestroy() {
-        mController = null;
+        mPlayerController = null;
     }
 }

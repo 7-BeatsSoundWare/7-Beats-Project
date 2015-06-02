@@ -1,4 +1,4 @@
-package br.com.sevenbeats.mvc.view;
+package br.com.sevenbeats.mvc.views;
 
 import android.app.Activity;
 

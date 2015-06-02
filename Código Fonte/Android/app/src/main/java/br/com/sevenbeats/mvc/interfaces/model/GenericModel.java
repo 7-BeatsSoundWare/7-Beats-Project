@@ -1,4 +1,4 @@
-package br.com.sevenbeats.mvc.model;
+package br.com.sevenbeats.mvc.interfaces.model;
 
 /**
  * Construído com o propósito de comunicar com a camada de DOMAIN (package domain)

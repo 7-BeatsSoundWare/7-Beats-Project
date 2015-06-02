@@ -1,4 +1,4 @@
-package br.com.sevenbeats.domain.objects;
+package br.com.sevenbeats.objects;
 
 /**
  * Created by diogojayme on 5/7/15.

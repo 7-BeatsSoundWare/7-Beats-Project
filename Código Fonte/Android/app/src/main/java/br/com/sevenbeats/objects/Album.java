@@ -1,4 +1,4 @@
-package br.com.sevenbeats.domain.objects;
+package br.com.sevenbeats.objects;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package br.com.sevenbeats.mvc.controller.player.service;
+package br.com.sevenbeats.mvc.player.service;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import java.io.IOException;
 import java.util.List;
 
-import br.com.sevenbeats.domain.objects.Song;
+import br.com.sevenbeats.objects.Song;
 
 
 public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {

@@ -1,4 +1,4 @@
-package br.com.sevenbeats.mvc.controller.player.service;
+package br.com.sevenbeats.mvc.player.service;
 
 
 import android.app.Service;

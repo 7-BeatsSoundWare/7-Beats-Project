@@ -1,4 +1,4 @@
-package br.com.sevenbeats.mvc.view;
+package br.com.sevenbeats.mvc.player;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -21,18 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.sevenbeats.R;
-import br.com.sevenbeats.utils.SevenBeatsAnnotations;
-import br.com.sevenbeats.mvc.controller.player.Controller;
-import br.com.sevenbeats.mvc.controller.player.service.MusicBinder;
-import br.com.sevenbeats.mvc.controller.player.service.MusicService;
-import br.com.sevenbeats.domain.objects.Song;
+import br.com.sevenbeats.mvc.player.service.MusicBinder;
+import br.com.sevenbeats.mvc.player.service.MusicService;
+import br.com.sevenbeats.objects.Song;
+import br.com.sevenbeats.utils.MvcAnnotations;
+import br.com.sevenbeats.utils.ReflectionAnnotation;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-@SevenBeatsAnnotations("VIEW") public class PlayerActivity extends Activity implements Controller.PreparedControllerListener{
+@MvcAnnotations("VIEW") public class PlayerActivity extends Activity {
     private MusicBinder mBinder;
-    private Controller mController;
+    private PlayerController mPlayerController;
+
     @InjectView(R.id.next) ImageButton mNext;
     @InjectView(R.id.song_name) TextView mSong;
     @InjectView(R.id.player_cover) ImageView mCover;
@@ -52,8 +53,20 @@ import butterknife.OnClick;
     }
 
     private void initActivityData(){
-        mController = new Controller(this, this);
-        mController.getData();
+        mPlayerController = new PlayerController(this);
+        mPlayerController.getAlbum();
+        mPlayerController.getSongs();
+    }
+
+
+    @ReflectionAnnotation("Method reflection")
+    private void getAlbum(Object data, boolean error){
+        System.out.println();
+    }
+
+    @ReflectionAnnotation("Method reflection")
+    private void getSongs(Object data, boolean error){
+        System.out.println();
     }
 
     @Override protected void onStart() {
@@ -68,16 +81,16 @@ import butterknife.OnClick;
     @Override protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(PlayerActivity.this).unregisterReceiver(musicViewUpdaterBroadcastReceiver);
-        mController.onControllerDestroy();
+        mPlayerController.onControllerDestroy();
         ButterKnife.reset(this);
-    }
-
-    @OnClick(R.id.previous) public void previous(View v){
-        mBinder.prev();
     }
 
     @OnClick(R.id.next) public void next(View v){
         mBinder.next();
+    }
+
+    @OnClick(R.id.previous) public void previous(View v){
+        mBinder.prev();
     }
 
     @OnClick(R.id.play_pause) public void playPause(View v){
@@ -212,8 +225,8 @@ import butterknife.OnClick;
      * Habilita ou desabilita componenets da activity
      *
      */
-    @Override
-    public void onViewPrepared(boolean prepared, boolean hasError) {
+    @ReflectionAnnotation("Method reflection")
+    public void onView(boolean prepared, boolean hasError) {
         setViewEnabled(prepared);
         setNextEnabled(prepared);
         setSeekBarEnabled(prepared);
@@ -235,6 +248,5 @@ import butterknife.OnClick;
         }
 
         setErrorViewEnabled(hasError);
-
     }
 }

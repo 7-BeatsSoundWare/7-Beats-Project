@@ -1,4 +1,4 @@
-package br.com.sevenbeats.mvc.view;
+package br.com.sevenbeats.mvc.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import br.com.sevenbeats.R;
+import br.com.sevenbeats.mvc.player.PlayerActivity;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
