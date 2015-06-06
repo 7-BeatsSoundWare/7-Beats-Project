@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".mvc.HomeActivity"
+            android:name=".presentation.home.SearchActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".mvc.player.service.MusicService" >
+        <service android:name=".presentation.player.service.MusicService" >
 
             <!-- nenhuma outra aplciação vai se comunicar  com este service, vai rodar localmente -->
         </service>
 
         <activity
-            android:name=".mvc.player.PlayerActivity"
+            android:name=".presentation.player.PlayerActivity"
             android:label="@string/title_activity_player" >
         </activity>
     </application>

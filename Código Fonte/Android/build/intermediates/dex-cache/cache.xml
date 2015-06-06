@@ -2,11 +2,32 @@
 <items version="2" >
 
     <item
-        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/libs/internal_impl-22.2.0.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-75807a341340a863cb53135e2f59f38df67ab954.jar" />
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-f007cd5905d85cca356733a51d1769ea3594883b.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-161a38575e783541c0ff010f47bac0d8b1a8a78e.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/library-2.4.0-8bcf962dd8ee2cb7c8adfe9530dcaf626f94f9c2.jar" />
+    </item>
+    <item
+        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-b190e1781766308b1237d897cdb5f403decf360c.jar" />
     </item>
     <item
         jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/6.1.0/63735f48b82bcd24cdd33821342428252eb1ca5a/butterknife-6.1.0.jar"
@@ -23,11 +44,11 @@
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-56dd45a237b0fb63205cb868d0451cd0ec9bf17d.jar" />
     </item>
     <item
-        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-338b5841484f134a47a01e59c90036143f5149ca.jar" />
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-5cdcb44512da5551e2eb7a7ae73030d7632dd322.jar" />
     </item>
     <item
         jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
@@ -44,20 +65,6 @@
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/gson-2.2.4-1a15f37b82a6e909425075b99e76500e878c769a.jar" />
     </item>
     <item
-        jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/library-2.4.0-8bcf962dd8ee2cb7c8adfe9530dcaf626f94f9c2.jar" />
-    </item>
-    <item
-        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-b97b66b5ce4e4614c84498c7bd08235ef642cfa9.jar" />
-    </item>
-    <item
         jar="/Users/diogojayme/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -72,11 +79,11 @@
         <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-485a13cc202fa7fcb9c0500c8bae0b2a37460f9f.jar" />
     </item>
     <item
-        jar="/Users/diogojayme/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jar="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-cb78138b9e19c52f1e77888eb64cfc9e061b9d6f.jar" />
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/diogojayme/Documents/7-Beats-Project/Código Fonte/Android/app/build/intermediates/pre-dexed/debug/classes-5186a3ab9cf0029b89176eee440e84660c044919.jar" />
     </item>
 
 </items>
