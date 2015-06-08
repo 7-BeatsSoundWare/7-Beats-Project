@@ -1,4 +1,4 @@
-package br.com.sevenbeats.presentation.home;
+package br.com.sevenbeats.presentation.search;
 
 import android.content.Context;
 import android.os.Handler;

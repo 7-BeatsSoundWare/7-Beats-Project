@@ -48,6 +48,7 @@ import butterknife.OnClick;
     @InjectView(R.id.player_loading) ProgressBar mLoadingPlayer;
     @InjectView(R.id.player_loading_view_container) View mLoadingContainer;
 
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);

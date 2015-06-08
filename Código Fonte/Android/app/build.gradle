@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "vuziq.s7venbeats"
+        applicationId "br.con.sevenbeats"
         minSdkVersion 19
         targetSdkVersion 21
         versionCode 1

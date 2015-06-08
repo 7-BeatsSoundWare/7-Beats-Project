@@ -1,8 +1,10 @@
-package br.com.sevenbeats.presentation.home;
+package br.com.sevenbeats.presentation.search;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +20,18 @@ import butterknife.OnClick;
 public class SearchActivity extends Activity {
 
     @InjectView(R.id.player) Button player;
+    @InjectView(R.id.search_list) RecyclerView list;
     @InjectView(R.id.home_search_field) EditText search;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_search);
         ButterKnife.inject(this);
+        list.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.player) public void goToPLayer(View view){
         startActivity(new Intent(this, PlayerActivity.class));
     }
