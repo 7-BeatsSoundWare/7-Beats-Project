@@ -28,9 +28,6 @@ public class MusicNotification extends Notification {
         notification.tickerText = "Player";
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
-        notification.setLatestEventInfo(context, "MusicPlayerSample",
-                "Playing: " + tag, pi);
-
         return this;
     }
 

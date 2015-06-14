@@ -1,37 +1,41 @@
 package br.com.sevenbeats;
 
+import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.widget.TextView;
 
-import br.com.sevenbeats.presentation.player.PlayerActivity;
+import org.junit.runner.RunWith;
 
+import br.com.sevenbeats.presentation.player.PlayerActivity;
 /**
  * Created by diogojayme on 6/8/15.
  */
+
+@LargeTest
+@RunWith(AndroidJUnit4.class)
 public class PlayerActivityTest extends ActivityInstrumentationTestCase2<PlayerActivity> {
 
     PlayerActivity activity;
+    TextView songName;
 
     public PlayerActivityTest() {
         super(PlayerActivity.class);
-        try {
-            setUp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    @Override
-    protected void setUp() throws Exception{
+    protected void setUp() throws Exception {
         super.setUp();
+        setActivityInitialTouchMode(true);
         activity = getActivity();
-        testViews();
     }
 
-    @SmallTest
-    public void testViews(){
-        TextView textView = (TextView) activity.findViewById(R.id.song_name);
-        assertNull(textView);
+
+    @SmallTest public void testPreconditions(){
+        assertNotNull(activity);
+    }
+
+    protected void tearDown() throws Exception {
+        super.tearDown();
     }
 }

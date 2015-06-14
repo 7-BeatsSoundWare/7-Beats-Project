@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="2dp">
+
+    <ImageView
+        android:id="@+id/queue_album_cover"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:src="@drawable/album3" />
+
+    <ImageButton
+        android:id="@+id/queue_options"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_navigation_more_vert"
+        style="@style/Base.Widget.AppCompat.ActionButton" />
+
+    <RelativeLayout
+        android:id="@+id/queue_info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toLeftOf="@+id/queue_options"
+        android:layout_toStartOf="@+id/queue_options"
+        android:layout_toEndOf="@+id/queue_album_cover"
+        android:layout_toRightOf="@id/queue_album_cover">
+
+        <TextView
+            android:id="@+id/queue_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorRippleSelected"
+            android:text="@string/text_placeholder_1" />
+
+        <TextView
+            android:id="@+id/queue_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/queue_song"
+            android:textColor="@color/colorRippleAccent"
+            android:text="@string/text_placeholder_1" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/primaryText"
+        android:layout_below="@+id/queue_album_cover"
+        android:layout_toEndOf="@+id/queue_album_cover"
+        android:layout_toRightOf="@+id/queue_album_cover" />
+</RelativeLayout>

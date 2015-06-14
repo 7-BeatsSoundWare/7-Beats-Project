@@ -1,6 +1,5 @@
 package br.com.sevenbeats.presentation.player;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,54 +9,101 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.sevenbeats.R;
-import br.com.sevenbeats.core.album.Album;
-import br.com.sevenbeats.utils.internet.http.ErrorResponse;
 import br.com.sevenbeats.core.song.Song;
+import br.com.sevenbeats.presentation.player.service.DownloadService;
 import br.com.sevenbeats.presentation.player.service.MusicBinder;
 import br.com.sevenbeats.presentation.player.service.MusicService;
 import br.com.sevenbeats.utils.annotation.MvcPattern;
+import br.com.sevenbeats.utils.mvc.interfaces.view.OnAdapterItemClickListener;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-
-@MvcPattern("Presenter") public class PlayerActivity extends Activity {
-    private MusicBinder mBinder;
-    private PlayerControl mPlayerControl;
+@MvcPattern("Presenter") public class PlayerActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, OnAdapterItemClickListener {
+    private MusicBinder musicBinder;
+    private PlayerController mPlayerController;
+    public static String EXTRA_SONG_ID = "id";
+    public static String EXTRA_PLAYLIST = "playlist";
 
     @InjectView(R.id.next) ImageButton mNext;
     @InjectView(R.id.song_name) TextView mSong;
-    @InjectView(R.id.player_cover) ImageView mCover;
     @InjectView(R.id.player_timer) TextView mTimer;
     @InjectView(R.id.artist_name) TextView mArtist;
+    @InjectView(R.id.player_cover) ImageView mCover;
     @InjectView(R.id.previous) ImageButton mPrevious;
+    @InjectView(R.id.player_toolbar) Toolbar mToolbar;
+    @InjectView(R.id.player_seek_bar) SeekBar mSeekBar;
+    @InjectView(R.id.player_queue) RecyclerView mQueue;
     @InjectView(R.id.play_pause) ImageButton mPlayPause;
-    @InjectView(R.id.player_seek_bar) ProgressBar mSeekBar;
+    @InjectView(R.id.player_shuffle) ImageButton mShuffle;
+    @InjectView(R.id.player_queue_btn) ImageButton mQueueBtn;
     @InjectView(R.id.player_loading) ProgressBar mLoadingPlayer;
     @InjectView(R.id.player_loading_view_container) View mLoadingContainer;
-
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         ButterKnife.inject(this);
-        initActivityData();
+        setSupportActionBar(mToolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowCustomEnabled(true);
+        }
+
+        mQueue.setLayoutManager(new LinearLayoutManager(this));
+        mPlayerController = new PlayerController(this);
+        mSeekBar.setOnSeekBarChangeListener(this);
+        registerForContextMenu(mQueue);
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
+        bindService(intent, musicConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void initActivityData(){
-        mPlayerControl = new PlayerControl(this);
+    private boolean hasExtras(String extraName){
+        if(getIntent() == null)
+            throw new NullPointerException("PlayerActivity must have a unique song or a playlist");
+
+        if(extraName.equals(EXTRA_SONG_ID)){
+            return getIntent().hasExtra(extraName);
+        }else if(extraName.equals(EXTRA_PLAYLIST)){
+            return getIntent().hasExtra(EXTRA_PLAYLIST);
+        }
+
+        return false;
+    }
+
+    private String getExtrasSongId(){
+        return getIntent().getExtras().getString(EXTRA_SONG_ID);
+    }
+
+    private ArrayList<Song> getExtraPlayList(){
+        return getIntent().getExtras().getParcelableArrayList(EXTRA_PLAYLIST);
     }
 
     @Override protected void onStart() {
@@ -75,16 +121,62 @@ import butterknife.OnClick;
         ButterKnife.reset(this);
     }
 
-    @OnClick(R.id.next) public void next(View v){
-        mBinder.next();
+    /**
+     * CSU3.1 avançar música
+     * */
+    @SuppressWarnings("unused")
+    @OnClick(R.id.next) public void nextClick(View v){
+        musicBinder.next();
     }
 
-    @OnClick(R.id.previous) public void previous(View v){
-        mBinder.prev();
+    /**
+     * CSU3.1 retroceder música
+     * */
+    @SuppressWarnings("unused")
+    @OnClick(R.id.previous) public void previousClick(View v){
+        musicBinder.prev();
     }
 
-    @OnClick(R.id.play_pause) public void playPause(View v){
-        mBinder.playPause();
+    /**
+     * CSU2 Controlar música
+     *      CSU2.1 Iniciar música
+     *      CSU2.2 Pausar música
+     *      CSU2.3 Resumir música
+     * */
+    @SuppressWarnings("unused")
+    @OnClick(R.id.play_pause) public void playPauseClick(View v){
+        musicBinder.playPause();
+    }
+
+    /**
+     * CSU5 - Embaralhar músicas
+     * */
+    @SuppressWarnings("unused")
+    @OnClick(R.id.player_shuffle) public void shuffleClick(View v){
+        musicBinder.shuffle();
+    }
+    @SuppressWarnings("unused")
+    @OnClick(R.id.player_queue_btn) public void onQueueClick(View v){
+        mQueue.setVisibility(mQueue.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+    }
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
+        if(fromUser){
+            musicBinder.changeMediaPlayerPosition(position);
+            seekBar.setProgress(position);
+        }
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 
     private void changePLayPause(boolean playing){
@@ -117,12 +209,13 @@ import butterknife.OnClick;
         mLoadingPlayer.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
+    @SuppressWarnings("unused")
     private void setErrorViewEnabled(boolean error){
         mCover.setImageResource(error ? R.drawable.error_placeholder : R.drawable.album2);
     }
 
     private void setViewEnabled(boolean enabled){
-        mLoadingContainer.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
+        mLoadingContainer.setVisibility(enabled ? View.GONE : View.VISIBLE);
 
         if(enabled){
             AlphaAnimation animation = new AlphaAnimation(1.0f , 0.0f);
@@ -135,9 +228,10 @@ import butterknife.OnClick;
     }
 
     private void setSongChanged(){
-        mSong.setText(mBinder.getCurrentSong().getName());
-        mArtist.setText(mBinder.getCurrentSong().getArtist());
+        mSong.setText(musicBinder.getCurrentSong().getName());
+        mArtist.setText(musicBinder.getCurrentSong().getArtist());
     }
+
 
     private void setBufferUpdate(int bufferUpdate){
         mSeekBar.setProgress(bufferUpdate);
@@ -155,27 +249,63 @@ import butterknife.OnClick;
         }
     }
 
-    private void updateView(){
+    private void setShuffleEnabled(boolean enabled){
+        mShuffle.setImageResource(enabled ? R.drawable.ic_av_shuffle : R.drawable.ic_av_shuffle_activated);
+    }
+
+    private void notifySongChanged(){
         setSongChanged();
-        changePLayPause(mBinder.getPlayer().isPlaying());
+        mSeekBar.setMax(musicBinder.getPlayer().getDuration());
+        changePLayPause(musicBinder.getPlayer().isPlaying());
+        Picasso.with(this).load(musicBinder.getCurrentSong().getAlbum().getImageUrl()).into(mCover);
     }
 
     private ServiceConnection musicConnection = new ServiceConnection() {
 
         @Override public void onServiceConnected(ComponentName name, IBinder service) {
-            mBinder = (MusicBinder) service;
-            List<Song> songList = new ArrayList<>();
-            songList.add(new Song(1,"http://69.28.84.155/public/musicas/years_and_years_desire.mp3","Desire", "Y & Y EP"));
-            songList.add(new Song(2,"http://69.28.84.155/public/musicas/years_and_years_take_shelter.mp3","Take Shelter", "Y & Y EP"));
-            songList.add(new Song(3,"http://69.28.84.155/public/musicas/years_and_years_king.mp3","King", "Y & Y EP"));
-            songList.add(new Song(4,"http://69.28.84.155/public/musicas/years_and_years_memo.mp3", "Memo", "Y & Y EP"));
-            mBinder.setPlayList(songList);
-            updateView();
+            musicBinder = (MusicBinder) service;
+
+            if(hasExtras(EXTRA_SONG_ID)){
+                mPlayerController.onRequest(PlayerConstants.METHOD_ON_SONGS, getExtrasSongId());
+            }else{
+                if(getExtraPlayList() == null){
+                    throw new NullPointerException("You must set a song or playlist");
+                }
+
+                onSongs(getExtraPlayList());
+            }
         }
 
         @Override public void onServiceDisconnected(ComponentName name) {
         }
     };
+
+
+    @SuppressWarnings("unused")
+    public  void onError(){
+        Log.d("MVC", "Updating view from method caller >>> onALbum");
+        Toast.makeText(this, "onError", Toast.LENGTH_SHORT).show();
+    }
+
+    @SuppressWarnings("unused")
+    public  void onSongs(ArrayList<Song> songs) {
+        //TODO validar para a view não receber nenhuma atualização enquanto o metodo setPlayList não for chamado
+        musicBinder.setPlayList(songs);
+        QueueAdapter adapter = new QueueAdapter();
+        adapter.setData(songs, this);
+        mQueue.setAdapter(adapter);
+        notifySongChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void onView(Boolean prepared) {
+        Log.d("MVC", "Updating view from method caller >>> onView");
+        setViewEnabled(prepared);
+        setNextEnabled(prepared);
+        setSeekBarEnabled(prepared);
+        setPreviousEnabled(prepared);
+        setPlayPauseEnabled(prepared);
+    }
 
     private BroadcastReceiver musicViewUpdaterBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -201,6 +331,9 @@ import butterknife.OnClick;
                 case MusicBinder.RESUME:
                     changePLayPause(true);
                     break;
+                case MusicBinder.SHUFFLE:
+                    setShuffleEnabled(true);
+                    break;
                 case MusicBinder.LOADING_ENABLED:
                     setLoadingEnabled(true);
                     break;
@@ -211,48 +344,35 @@ import butterknife.OnClick;
         }
     };
 
-    @SuppressWarnings("unused")
-    public  void onError(ErrorResponse errorResponse){
-        Log.d("MVC", "Updating view from method caller >>> onALbum");
-        Toast.makeText(this, "onError" + errorResponse.getErrorId(), Toast.LENGTH_SHORT).show();
+    @Override
+    public void onBackPressed() {
+        if(mQueue.getVisibility() == View.VISIBLE){
+            mQueue.setVisibility(View.INVISIBLE);
+        }else{
+            super.onBackPressed();
+        }
     }
 
-    @SuppressWarnings("unused")
-    public  void onAlbum(Album album){
-        Log.d("MVC", "Updating view from method caller >>> onALbum");
-        Toast.makeText(this,"OnALbum",Toast.LENGTH_SHORT).show();
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add("DOWNLOAD");
     }
 
-    @SuppressWarnings("unused")
-    public  void onSongsList(ArrayList<Song> list){
-        Log.d("MVC", "Updating view from method caller >>> onSongs");
-        System.out.println();
-        Toast.makeText(this,"onSongs",Toast.LENGTH_SHORT).show();
-    }
-
-    @SuppressWarnings("unused")
-    public void onView(Boolean prepared) {
-        Log.d("MVC", "Updating view from method caller >>> onView");
-        setViewEnabled(prepared);
-        setNextEnabled(prepared);
-        setSeekBarEnabled(prepared);
-        setPreviousEnabled(prepared);
-        setPlayPauseEnabled(prepared);
-
-        if (prepared && musicConnection != null) {
-            //controller avisa quando o service deverá começar a ser executado
-            Intent i = new Intent(this, MusicService.class);
-            startService(i);
-            bindService(new Intent(this, MusicService.class), musicConnection, Context.BIND_AUTO_CREATE);
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if(item.getTitle() == "DOWNLOAD"){
+            Intent intent = new Intent(this, DownloadService.class);
+            intent.putExtra("downloadUrl", "http://69.28.84.155/public/musicas/kendrick_lamar_the_art_of_peer_pressure.mp3" );
+            startService(intent);
         }
 
+        return super.onContextItemSelected(item);
     }
 
-    public static final String onView = "onView";
-    public static final String onAlbum = "onAlbum";
-    public static final String onSongs = "onSongs";
-    public static final String onError = "onError";
-    public static final String onSongsList = "onSongsList";
-
-
+    @Override
+    public void onItemClick(Object data, int position) {
+        if (data instanceof Song){
+            mQueue.showContextMenu();
+        }
+    }
 }

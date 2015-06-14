@@ -11,6 +11,9 @@ public class MusicService extends Service {
 
     private final IBinder musicBind = new MusicBinder(this);
 
+    public MusicService() {
+    }
+
     @Override
     public void onCreate() {
     }

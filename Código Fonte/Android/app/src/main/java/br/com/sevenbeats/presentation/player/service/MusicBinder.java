@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.sevenbeats.core.song.Song;
@@ -19,10 +21,12 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     private Handler handler;
     private Context context;
     private List<Song> songs;
+    private boolean shuffle;
     private MediaPlayer player;
     private int currentTrack = 0;
     private int currentSongState = 0;
     private static final int PROGRESS_DELAY = 1000;
+    private HashMap<Integer, Song> songsShuffleStateBehavior;
 
     public MusicBinder (Context context){
         this.context = context;
@@ -31,6 +35,7 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         this.player.setOnErrorListener(this);
         this.player.setOnPreparedListener(this);
         this.player.setOnBufferingUpdateListener(this);
+        this.songsShuffleStateBehavior = new HashMap<>();
     }
 
     public MediaPlayer getPlayer(){
@@ -67,6 +72,9 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         return oldSong != null && oldSong.getId() == getCurrentSong().getId();
     }
 
+    /**
+     * CSU 2.1 - Iniciar música
+     * */
     public void play(){
         try {
             player.reset();
@@ -79,6 +87,9 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         }
     }
 
+    /**
+     * CSU 2.2 Pausar música
+     * */
     public void pause(){
         player.pause();
         currentSongState = player.getCurrentPosition();
@@ -86,10 +97,45 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         setState(PAUSE);
     }
 
+    /**
+     * CSU 2.3 Resumir música
+     * */
     public void resume(){
         player.start();
         setState(RESUME);
         handler.post(bufferingUpdateRunnable);
+    }
+
+
+    /**
+     * CSU 5 Embaralhar músicas
+     * */
+    public void shuffle(){
+
+        if(!shuffle){
+            saveListActualState();
+            Collections.shuffle(songs);
+        }else{
+            restoreListActualState();
+        }
+
+        setState(SHUFFLE);
+    }
+
+    public void changeMediaPlayerPosition(int position){
+        player.seekTo(position);
+    }
+
+    private void saveListActualState(){
+      //TODO reverter a lista de shuffle
+    }
+
+    private void restoreListActualState(){
+      //TODO alterar o shuffle
+    }
+
+    public boolean isShuffle(){
+        return shuffle;
     }
 
     public void setCurrentTrack(int index){
@@ -155,6 +201,7 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     public static final String ERROR = "ERROR";
     public static final String PAUSE = "PAUSE";
     public static final String RESUME = "RESUME";
+    public static final String SHUFFLE = "SHUFFLE";
     public static final String LOADING_ENABLED = "LOADING ENABLED";
     public static final String LOADING_DISABLED = "LOADING DISABLED";
     public static final String EXTRAS = "EXTRAS";

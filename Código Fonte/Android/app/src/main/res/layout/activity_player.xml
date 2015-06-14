@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
-
 
     <LinearLayout
         android:id="@+id/player_controls"
@@ -16,6 +15,13 @@
         android:orientation="horizontal"
         android:layout_marginBottom="12dp"
         android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/player_shuffle"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_av_shuffle"
+            style="@style/Base.Widget.AppCompat.ActionButton" />
 
         <ImageButton
             android:id="@+id/previous"
@@ -55,7 +61,6 @@
                 fab:fab_colorRipple="@color/colorRippleAccent" />
         </RelativeLayout>
 
-
         <ImageButton
             android:id="@+id/next"
             android:layout_width="72dp"
@@ -63,6 +68,14 @@
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_next"
             style="@style/Base.Widget.AppCompat.ActionButton" />
+
+        <ImageButton
+            android:id="@+id/player_queue_btn"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_list"
+            style="@style/Base.Widget.AppCompat.ActionButton" />
+
     </LinearLayout>
 
     <ImageView
@@ -131,6 +144,7 @@
         android:id="@+id/player_loading_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:background="#ffffff">
 
         <TextView
@@ -155,4 +169,20 @@
             android:layout_below="@+id/player_loading_text" />
     </RelativeLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/player_queue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="52dp"
+        android:visibility="gone"
+        android:background="@color/divider" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/player_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        app:theme="@style/AppTheme"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:background="@color/darkTransparentActionBar" />
 </RelativeLayout>
