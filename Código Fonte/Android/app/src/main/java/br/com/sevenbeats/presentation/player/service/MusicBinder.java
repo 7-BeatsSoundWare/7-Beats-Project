@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,10 @@ import br.com.sevenbeats.core.song.Song;
 
 
 public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+
+    //TESTE
+    public boolean playing;
+    //ENDTESTE
 
     private Song oldSong;
     private Handler handler;
@@ -40,6 +43,10 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
 
     public MediaPlayer getPlayer(){
         return player;
+    }
+
+    public boolean isValidPlaylist(List<Song> songs){
+        return songs != null && songs.size() != 0;
     }
 
     public void setPlayList(List<Song> songs){
@@ -75,16 +82,21 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     /**
      * CSU 2.1 - Iniciar música
      * */
-    public void play(){
+    public boolean play(){
+        boolean success;
         try {
             player.reset();
             player.setDataSource(getCurrentSong().getUrl());
             player.prepareAsync();
             oldSong = getCurrentSong();
             setState(PLAY, LOADING_ENABLED);
-        } catch (IOException e) {
+            success = true;
+        } catch (Exception e){
             e.printStackTrace();
+            success = false;
         }
+
+        return success;
     }
 
     /**
@@ -120,10 +132,6 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         }
 
         setState(SHUFFLE);
-    }
-
-    public void changeMediaPlayerPosition(int position){
-        player.seekTo(position);
     }
 
     private void saveListActualState(){
@@ -167,12 +175,14 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
+        playing = true;
         handler.post(bufferingUpdateRunnable);
         setState(PLAY, LOADING_DISABLED);
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        playing = false;
         setState(ERROR);
         return false;
     }

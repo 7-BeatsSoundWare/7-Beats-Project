@@ -11,14 +11,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import java.util.StringTokenizer;
 
 import br.com.sevenbeats.R;
-import br.com.sevenbeats.presentation.album.AlbumFragment;
+import br.com.sevenbeats.presentation.album.detail.AlbumDetailFragment;
 import br.com.sevenbeats.presentation.player.PlayerActivity;
+import br.com.sevenbeats.presentation.playlists.detail.PlaylistDetailFragment;
+import br.com.sevenbeats.presentation.playlists.list.PlaylistFragment;
 import br.com.sevenbeats.presentation.search.SearchFragment;
 import br.com.sevenbeats.utils.annotation.MvcPattern;
 import br.com.sevenbeats.utils.mvc.interfaces.view.ActivityCallBack;
@@ -26,9 +29,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 @MvcPattern("View")public class MainActivity extends AppCompatActivity implements ActivityCallBack {
-    FragmentTransaction mTransaction;
-    ActionBarDrawerToggle mDrawerToggle;
-    @InjectView(R.id.main_toolbar) Toolbar mToolbar;
+
+    public Menu menu;
+    public ActionBar mActionBar;
+    public FragmentTransaction mTransaction;
+    public ActionBarDrawerToggle mDrawerToggle;
+    public @InjectView(R.id.main_toolbar) Toolbar mToolbar;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,26 +44,24 @@ import butterknife.InjectView;
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                invalidateOptionsMenu();
                 syncState();
             }
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
                 syncState();
             }
         };
 
         drawerLayout.setDrawerListener(mDrawerToggle);
         setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
+        mActionBar = getSupportActionBar();
 
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setDisplayShowCustomEnabled(true);
+        if(mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeButtonEnabled(true);
+            mActionBar.setDisplayShowHomeEnabled(true);
+            mActionBar.setDisplayShowCustomEnabled(true);
         }
 
         initFragment();
@@ -104,31 +108,55 @@ import butterknife.InjectView;
         mTransaction.commit();
     }
 
-
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-
     }
 
-
     @SuppressLint("CommitTransaction")
-    @Override public void notifyFragmentChanged(Object data, int fragmentId) {
-        // passando o ID do album por parametro pra outro fragmento
-        mTransaction = getFragmentManager().beginTransaction();
+    @Override public void notifyFragmentChanged(Object data, int fragmentId, String activityTitle) {
+        setActivityTitle(activityTitle);
 
-        if(fragmentId == 1){
-            AlbumFragment fragment = AlbumFragment.newInstance(data.toString());
-            mTransaction.replace(R.id.main_fragment_container, fragment);
-        }else if(fragmentId == 0 ){
-            SearchFragment fragment = SearchFragment.newInstance();
-            mTransaction.replace(R.id.main_fragment_container, fragment);
+        mTransaction = getFragmentManager().beginTransaction();
+        Fragment fragment = null;
+        boolean show = false;
+
+        if(fragmentId == AlbumDetailFragment.ALBUM_FRAGMENT_ID){
+            fragment = AlbumDetailFragment.newInstance(data.toString());
+        }else if(fragmentId == SearchFragment.SEARCH_FRAGMENT_ID){
+            fragment = SearchFragment.newInstance();
+        }else if(fragmentId == PlaylistFragment.PLAYLIST_FRAGMENT_ID){
+            fragment = PlaylistFragment.newInstance();
+            show = true;
+        }else if(fragmentId == PlaylistDetailFragment.PLAYLIST_DETAIL_ID){
+            fragment = PlaylistDetailFragment.newInstance(data.toString());
         }
 
+        onMenuChanged(show, R.id.action_playlist);
+
+        mTransaction.replace(R.id.main_fragment_container, fragment);
         mTransaction.addToBackStack(null);
         mTransaction.commit();
     }
 
-    public static int albumFragmentId = 1;
+    public void setActivityTitle(String title){
+        if(title != null && mActionBar != null){
+            mActionBar.setTitle(title);
+        }
+    }
+
+    public void onMenuChanged(boolean show, int id){
+        MenuItem item = menu.findItem(id);
+        item.setVisible(show);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+
 
     @Override public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {

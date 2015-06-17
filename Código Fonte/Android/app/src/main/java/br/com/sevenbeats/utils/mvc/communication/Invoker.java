@@ -32,8 +32,11 @@ public class Invoker {
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             if(e instanceof NoSuchMethodException){
+                ((NoSuchMethodException) e).printStackTrace();
             }else if(e instanceof InvocationTargetException){
+                ((InvocationTargetException) e).printStackTrace();
             }else {
+                e.printStackTrace();
             }
 
             e.printStackTrace();

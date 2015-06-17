@@ -1,0 +1,18 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.sevenbeats.presentation.playlists.list.PlaylistFragment">
+
+    <ProgressBar
+        android:id="@+id/playlist_detail_loading"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/playlist_detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

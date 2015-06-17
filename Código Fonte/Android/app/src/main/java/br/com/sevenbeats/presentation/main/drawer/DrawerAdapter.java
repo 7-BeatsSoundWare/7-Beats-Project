@@ -40,17 +40,8 @@ public class DrawerAdapter extends RecyclerView.Adapter {
                 drawerHolder.drawerBtn.setOnClickListener(new CustomClickListener(listener, position));
                 break;
             case 1:
-                drawerHolder.drawerIcon.setImageResource(R.drawable.ic_av_playlist_add);
-                drawerHolder.drawerText.setText("Playlist");
-                drawerHolder.drawerBtn.setOnClickListener(new CustomClickListener(listener, position));
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                drawerHolder.drawerIcon.setImageResource(R.drawable.ic_action_settings);
-                drawerHolder.drawerText.setText("Settings");
+                drawerHolder.drawerIcon.setImageResource(R.drawable.ic_action_av_my_library_music);
+                drawerHolder.drawerText.setText("Playlists");
                 drawerHolder.drawerBtn.setOnClickListener(new CustomClickListener(listener, position));
                 break;
         }

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import br.com.sevenbeats.R;
+import br.com.sevenbeats.presentation.playlists.list.PlaylistFragment;
+import br.com.sevenbeats.presentation.search.SearchFragment;
 import br.com.sevenbeats.utils.mvc.interfaces.view.ActivityCallBack;
 import br.com.sevenbeats.utils.mvc.interfaces.view.OnAdapterItemClickListener;
 import butterknife.ButterKnife;
@@ -41,7 +43,15 @@ public class MainDrawerFragment extends Fragment implements OnAdapterItemClickLi
 
     @Override
     public void onItemClick(Object data, int position) {
-        mCallBack.notifyFragmentChanged(data, position);
+        switch (position){
+            case SearchFragment.SEARCH_FRAGMENT_ID:
+                mCallBack.notifyFragmentChanged(data, SearchFragment.SEARCH_FRAGMENT_ID, "Buscar");
+                break;
+            case PlaylistFragment.PLAYLIST_FRAGMENT_ID:
+                mCallBack.notifyFragmentChanged(data, PlaylistFragment.PLAYLIST_FRAGMENT_ID, "Minhas playlists");
+                break;
+        }
+
     }
 
     @Override

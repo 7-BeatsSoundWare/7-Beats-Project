@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import br.com.sevenbeats.core.song.Song;
 import br.com.sevenbeats.utils.annotation.MvcPattern;
-import br.com.sevenbeats.utils.internet.ServiceManager;
+import br.com.sevenbeats.utils.service.ServiceManager;
 import br.com.sevenbeats.utils.mvc.base.SuperController;
 
 @MvcPattern("Control") public class PlayerController extends SuperController {

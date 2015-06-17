@@ -5,8 +5,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 
-import br.com.sevenbeats.utils.internet.ServiceManager;
+import br.com.sevenbeats.utils.service.ServiceManager;
 import br.com.sevenbeats.utils.mvc.communication.Invoker;
 import br.com.sevenbeats.utils.mvc.interfaces.controller.Controller;
 
@@ -21,16 +22,24 @@ public class SuperController implements Controller {
 
     public SuperController(Context context, Fragment fragment){
         this.fragment = fragment;
-        this.mainHandler = new android.os.Handler(context.getMainLooper());
+        initHandler(context.getMainLooper());
     }
 
     public SuperController(Context context){
         this.activity = (Activity) context;
+        initHandler(context.getMainLooper());
+    }
+
+    public void initHandler(Looper looper){
+        this.mainHandler = new android.os.Handler(looper);
     }
 
     @Override
     @SuppressWarnings("unused")
-    public void onRequest(String method, String... params) {
+    public void onRequest(String method, String... params) {}
+
+//    @Override
+    public void onRequest(String method, Object... params) {
 
     }
 
@@ -40,6 +49,17 @@ public class SuperController implements Controller {
             @Override
             public void run() {
                 notifyView(methodName, result);
+                mainHandler.removeCallbacks(this);
+            }
+        });
+    }
+
+    @Override
+    public void onResult(final String methodName) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyView(methodName);
                 mainHandler.removeCallbacks(this);
             }
         });
