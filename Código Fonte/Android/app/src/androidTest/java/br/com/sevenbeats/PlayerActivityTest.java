@@ -39,20 +39,9 @@ public class PlayerActivityTest extends ActivityInstrumentationTestCase2<PlayerA
         assertNotNull(activity.musicBinder);
     }
 
-    @SmallTest public void testValidList1(){
-        List<Song> songList = new ArrayList<>();
-        songList.add(new Song(3, "", "", "", null));
-        assertTrue(activity.musicBinder.isValidPlaylist(songList));
-    }
-
-    @SmallTest public void testValidList2(){
-        List<Song> songList = null;
-        assertFalse(activity.musicBinder.isValidPlaylist(songList));
-    }
-
     @SmallTest public void testPlay1(){
         List<Song> songList = new ArrayList<>();
-        songList.add(null);
+        songList.add(new Song(3, "aUrlStringParam", "", "", null));
         activity.musicBinder.setPlayList(songList);
         assertTrue(activity.musicBinder.play());
     }
@@ -64,13 +53,99 @@ public class PlayerActivityTest extends ActivityInstrumentationTestCase2<PlayerA
         assertTrue(activity.musicBinder.play());
     }
 
-    @SmallTest public void testPlay3(){
+    @SmallTest public void testValidList1(){
         List<Song> songList = new ArrayList<>();
-        songList.add(new Song(3, "fsdfsdfsdf", "", "", null));
-        activity.musicBinder.setPlayList(songList);
-        assertTrue(activity.musicBinder.play());
+        songList.add(new Song(3, "", "", "", null));
+        assertTrue(activity.musicBinder.isValidPlaylist(songList));
     }
 
+    @SmallTest public void testValidList2(){
+        List<Song> songList = null;
+        assertFalse(activity.musicBinder.isValidPlaylist(songList));
+    }
+
+
+    @SmallTest public void testPause1(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.pause();
+        assertTrue(activity.musicBinder.getPlayer().isPlaying());
+    }
+
+
+
+    @SmallTest public void testNextStart(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.next();
+        assertTrue(activity.musicBinder.oldIndex < activity.musicBinder.getCurrentSongIndex());
+        activity.musicBinder.setCurrentSongIndex(0);
+    }
+
+    @SmallTest public void testNextMiddle(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.setCurrentSongIndex(1);
+        activity.musicBinder.next();
+        assertTrue(activity.musicBinder.oldIndex < activity.musicBinder.getCurrentSongIndex());
+        activity.musicBinder.setCurrentSongIndex(0);
+    }
+
+    @SmallTest public void testNextEnd(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.setCurrentSongIndex(2);
+        activity.musicBinder.next();
+        assertTrue(activity.musicBinder.oldIndex < activity.musicBinder.getCurrentSongIndex());
+        activity.musicBinder.setCurrentSongIndex(0);
+    }
+
+    @SmallTest public void testPrevStart(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.setCurrentSongIndex(0);
+        activity.musicBinder.prev();
+        assertTrue(activity.musicBinder.oldIndex > activity.musicBinder.getCurrentSongIndex());
+        activity.musicBinder.setCurrentSongIndex(0);
+    }
+
+    @SmallTest public void testPrevMiddle(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.setCurrentSongIndex(1);
+        activity.musicBinder.prev();
+        assertFalse(activity.musicBinder.oldIndex > activity.musicBinder.getCurrentSongIndex());
+        activity.musicBinder.setCurrentSongIndex(0);
+    }
+
+
+    @SmallTest public void testPrevEnd(){
+        List<Song> songList = new ArrayList<>();
+        songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
+        activity.musicBinder.setPlayList(songList);
+        activity.musicBinder.setCurrentSongIndex(2);
+        activity.musicBinder.prev();
+        assertFalse(activity.musicBinder.oldIndex > activity.musicBinder.getCurrentSongIndex());
+        activity.musicBinder.setCurrentSongIndex(0);
+    }
 
 //    /**
 //     * Esse teste não depende de entradas do usuário,

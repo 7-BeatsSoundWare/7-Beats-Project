@@ -20,6 +20,7 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     public boolean playing;
     //ENDTESTE
 
+    public int oldIndex;
     private Song oldSong;
     private Handler handler;
     private Context context;
@@ -54,12 +55,14 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     }
 
     public void next(){
-        setCurrentTrack(getCurrentTrack() + (getCurrentTrack() == (songs.size() -1) ? 0 : 1 ));
+        oldIndex = getCurrentSongIndex();
+        setCurrentTrack(getCurrentSongIndex() + (getCurrentSongIndex() == (songs.size() -1) ? 0 : 1 ));
         setState(NEXT);
     }
 
     public void prev(){
-        setCurrentTrack(getCurrentTrack() == 0 ? (songs.size() - 1) : (getCurrentTrack() - 1));
+        oldIndex = getCurrentSongIndex();
+        setCurrentTrack(getCurrentSongIndex() == 0 ? (songs.size() - 1) : (getCurrentSongIndex() - 1));
         setState(PREVIOUS);
     }
 
@@ -118,7 +121,6 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         handler.post(bufferingUpdateRunnable);
     }
 
-
     /**
      * CSU 5 Embaralhar músicas
      * */
@@ -151,7 +153,11 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         play();
     }
 
-    public int getCurrentTrack(){
+
+    public void setCurrentSongIndex(int index){
+        this.currentTrack = index;
+    }
+    public int getCurrentSongIndex(){
         return currentTrack;
     }
 

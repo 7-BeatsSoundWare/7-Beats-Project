@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
+import br.com.sevenbeats.core.album.Album;
 import br.com.sevenbeats.presentation.album.detail.AlbumDetailFragment;
 import br.com.sevenbeats.presentation.main.MainActivity;
 import br.com.sevenbeats.presentation.playlists.detail.PlaylistDetailFragment;
@@ -77,9 +78,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Object obj = ServiceManager.getInstance().build().getAlbumService().listAlbums("a");
-                assertNotNull(obj);
-                assertSame(obj.getClass(), ArrayList.class);
+                Object obj = ServiceManager.getInstance().build().getAlbumService().listAlbums("Good Kid, M.A.A.D City");
+                ArrayList<Album> albumList = (ArrayList<Album>) obj;
+                assertTrue(albumList.size() > 0);
             }
         }).start();
 
@@ -96,8 +97,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
             @Override
             public void run() {
                 Object obj = ServiceManager.getInstance().build().getAlbumService().listAlbums("dsfsdsfs");
-                assertNotNull(obj.getClass());
-                assertSame(obj.getClass(), ArrayList.class);
+                ArrayList<Album> albumList = (ArrayList<Album>) obj;
+                assertTrue(albumList.size() > 0);
             }
         }).start();
 
