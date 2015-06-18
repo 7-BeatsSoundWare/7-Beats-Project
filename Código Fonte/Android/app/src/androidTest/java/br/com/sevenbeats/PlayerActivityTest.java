@@ -73,15 +73,18 @@ public class PlayerActivityTest extends ActivityInstrumentationTestCase2<PlayerA
         assertTrue(activity.musicBinder.getPlayer().isPlaying());
     }
 
-
-
     @SmallTest public void testNextStart(){
         List<Song> songList = new ArrayList<>();
         songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
         songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
         songList.add(new Song(5, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
         activity.musicBinder.setPlayList(songList);
-        activity.musicBinder.next();
+        try {
+            activity.musicBinder.next();
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertTrue(activity.musicBinder.oldIndex < activity.musicBinder.getCurrentSongIndex());
         activity.musicBinder.setCurrentSongIndex(0);
     }
@@ -110,7 +113,7 @@ public class PlayerActivityTest extends ActivityInstrumentationTestCase2<PlayerA
         activity.musicBinder.setCurrentSongIndex(0);
     }
 
-    @SmallTest public void testPrevStart(){
+    @SmallTest public void testPrevStart() throws InterruptedException {
         List<Song> songList = new ArrayList<>();
         songList.add(new Song(3, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
         songList.add(new Song(4, "http://69.28.84.155/public/musicas/kendrick_lamar_sherane_aka_master_splinters_daughter.mp3", "", "", null));
@@ -118,7 +121,15 @@ public class PlayerActivityTest extends ActivityInstrumentationTestCase2<PlayerA
         activity.musicBinder.setPlayList(songList);
         activity.musicBinder.setCurrentSongIndex(0);
         activity.musicBinder.prev();
-        assertTrue(activity.musicBinder.oldIndex > activity.musicBinder.getCurrentSongIndex());
+        Thread.sleep(4000);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                assertTrue(activity.musicBinder.oldIndex > activity.musicBinder.getCurrentSongIndex());
+            }
+        }).start();
+
         activity.musicBinder.setCurrentSongIndex(0);
     }
 

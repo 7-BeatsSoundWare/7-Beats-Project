@@ -108,7 +108,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     }
 
     @LargeTest public void testLogin2()  throws Exception {
-        assertTrue((activity.isValidUsernameLenght("login")));
+        assertFalse((activity.isValidUsernameLenght("login")));
     }
 
     @LargeTest public void testLogin3()  throws Exception {
