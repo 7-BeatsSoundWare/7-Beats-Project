@@ -18,23 +18,25 @@
 
         <ImageButton
             android:id="@+id/player_shuffle"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginRight="16dp"
             android:src="@drawable/ic_av_shuffle"
             style="@style/Base.Widget.AppCompat.ActionButton" />
 
         <ImageButton
             android:id="@+id/previous"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginRight="16dp"
             android:src="@drawable/ic_previous"
             style="@style/Base.Widget.AppCompat.ActionButton"/>
 
         <RelativeLayout
             android:id="@+id/player_play_pause_container"
             android:layout_width="72dp"
-            android:layout_height="72dp">
+            android:layout_height="82dp"
+            android:layout_marginRight="16dp">
 
             <ProgressBar
                 android:id="@+id/player_loading"
@@ -46,8 +48,8 @@
 
             <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/play_pause"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:visibility="visible"
@@ -63,16 +65,17 @@
 
         <ImageButton
             android:id="@+id/next"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:src="@drawable/ic_next"
+            android:layout_marginRight="16dp"
             style="@style/Base.Widget.AppCompat.ActionButton" />
 
         <ImageButton
             android:id="@+id/player_queue_btn"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginRight="16dp"
             android:src="@drawable/ic_list"
             style="@style/Base.Widget.AppCompat.ActionButton" />
 
@@ -85,7 +88,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:layout_above="@+id/player_seek_bar"
-        android:src="@drawable/album5"/>
+        android:src="@drawable/placeholder"/>
 
     <View
         android:layout_width="match_parent"
@@ -100,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/player_controls"
         android:layout_marginBottom="22dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:text="00:00" />
 
     <RelativeLayout
@@ -175,7 +178,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="52dp"
         android:visibility="gone"
-        android:background="@color/divider" />
+        android:background="@android:color/white" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/player_toolbar"
@@ -184,5 +187,5 @@
         android:minHeight="?android:attr/actionBarSize"
         app:theme="@style/AppTheme"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:background="@color/darkTransparentActionBar" />
+        android:background="@color/colorPrimary" />
 </RelativeLayout>

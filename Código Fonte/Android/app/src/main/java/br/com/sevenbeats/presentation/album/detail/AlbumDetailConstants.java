@@ -1,9 +1,9 @@
-package br.com.sevenbeats.presentation.album;
+package br.com.sevenbeats.presentation.album.detail;
 
 /**
  * Created by diogojayme on 6/12/15.
  */
-public class AlbumConstants {
+public class AlbumDetailConstants {
     public static String EXTRA_ALBUM_ID = "idAlbum";
 
     public final static String METHOD_ON_ERROR = "onError";

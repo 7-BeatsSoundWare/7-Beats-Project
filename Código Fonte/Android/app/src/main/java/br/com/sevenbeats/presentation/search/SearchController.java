@@ -7,7 +7,7 @@ import android.os.HandlerThread;
 import java.util.ArrayList;
 
 import br.com.sevenbeats.core.album.Album;
-import br.com.sevenbeats.utils.internet.ServiceManager;
+import br.com.sevenbeats.utils.service.ServiceManager;
 import br.com.sevenbeats.utils.mvc.base.SuperController;
 
 /**

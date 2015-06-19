@@ -1,11 +1,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.sevenbeats.presentation.album.AlbumFragment">
+    tools:context="br.com.sevenbeats.presentation.album.detail.AlbumDetailFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/album_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ProgressBar
+        android:id="@+id/album_loading"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

@@ -1,7 +1,9 @@
-package br.com.sevenbeats.utils.internet;
+package br.com.sevenbeats.utils.service;
 
 import br.com.sevenbeats.core.album.AlbumService;
+import br.com.sevenbeats.core.playlist.PlaylistService;
 import br.com.sevenbeats.core.song.SongService;
+import br.com.sevenbeats.core.user.UserService;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -30,10 +32,31 @@ public class ServiceManager {
     }
 
     public  SongService getSongService(){
+        if(restAdapter == null){
+            throw  new NullPointerException("You need call build before get your service.");
+        }
         return restAdapter.create(SongService.class);
     }
 
+    public PlaylistService getPlaylistService(){
+        if(restAdapter == null){
+            throw  new NullPointerException("You need call build before get your service.");
+        }
+        return restAdapter.create(PlaylistService.class);
+    }
+
+
+    public UserService getUserService(){
+        if(restAdapter == null){
+            throw  new NullPointerException("You need call build before get your service.");
+        }
+        return restAdapter.create(UserService.class);
+    }
+
     public  AlbumService getAlbumService(){
+        if(restAdapter == null){
+            throw  new NullPointerException("You need call build before get your service.");
+        }
         return restAdapter.create(AlbumService.class);
     }
 
@@ -55,4 +78,5 @@ public class ServiceManager {
     }
 
     private static final String url = "http://69.28.84.155:8080/7beats/";
+//    private static final String url = "http://10.0.1.34:8080/7beats/";
 }

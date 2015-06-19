@@ -1,4 +1,4 @@
-package br.com.sevenbeats.presentation.album;
+package br.com.sevenbeats.presentation.album.detail;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,27 +22,17 @@ import butterknife.InjectView;
 /**
  * Created by diogojayme on 6/11/15.
  */
-public class AlbumAdapter extends RecyclerView.Adapter {
+public class AlbumDetailAdapter extends RecyclerView.Adapter {
 
     private int HEADER = 1;
     private int NORMAL = 2;
-
     private Album album;
     private List<Song> songs;
-
     private OnAdapterItemClickListener listener;
 
-    public AlbumAdapter(Album album, OnAdapterItemClickListener listener){
+    protected AlbumDetailAdapter(Album album, OnAdapterItemClickListener listener){
         this.album = album;
         this.songs = album.getMusicas();
-
-        for (int i = 0; i < songs.size(); i++) {
-            Album tmpAlbum = new Album();
-            tmpAlbum.setId(album.getId());
-            tmpAlbum.setImageUrl(album.getImageUrl());
-            songs.get(i).setAlbum(tmpAlbum);
-        }
-
         this.listener = listener;
     }
 
@@ -81,7 +71,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
         return HEADER == 1;
     }
 
-    public class CustomClickListener implements View.OnClickListener{
+    private class CustomClickListener implements View.OnClickListener{
 
         private int position;
         private List<Song> songs;

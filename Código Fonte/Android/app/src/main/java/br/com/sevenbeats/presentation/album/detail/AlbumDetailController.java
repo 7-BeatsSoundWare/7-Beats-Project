@@ -1,18 +1,18 @@
-package br.com.sevenbeats.presentation.album;
+package br.com.sevenbeats.presentation.album.detail;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 
 import br.com.sevenbeats.utils.annotation.MvcPattern;
-import br.com.sevenbeats.utils.internet.ServiceManager;
+import br.com.sevenbeats.utils.service.ServiceManager;
 import br.com.sevenbeats.utils.mvc.base.SuperController;
 
-@MvcPattern("Controller") public class AlbumController extends SuperController {
+@MvcPattern("Controller") public class AlbumDetailController extends SuperController {
 
     private Handler backgroundHandler;
 
-    public AlbumController(Context context, AlbumFragment fragment){
+    public AlbumDetailController(Context context, AlbumDetailFragment fragment){
         super(context, fragment);
         HandlerThread secondaryThread = new HandlerThread("Background Handler");
         secondaryThread.start();
@@ -27,14 +27,14 @@ import br.com.sevenbeats.utils.mvc.base.SuperController;
                 try{
                     Object object = null;
                     switch (methodName) {
-                        case AlbumConstants.METHOD_ON_BIND_VIEW:
+                        case AlbumDetailConstants.METHOD_ON_BIND_VIEW:
                             object = ServiceManager.getInstance().build().getAlbumService().album(params[0]);
                             break;
                     }
 
                     onResult(methodName, object);
                 }catch (Exception e) {
-                    onError(AlbumConstants.METHOD_ON_ERROR);
+                    onError(AlbumDetailConstants.METHOD_ON_ERROR);
                     e.printStackTrace();
                 }
             }

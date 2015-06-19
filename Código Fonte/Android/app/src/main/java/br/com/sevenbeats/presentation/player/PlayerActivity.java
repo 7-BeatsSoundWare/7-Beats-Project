@@ -36,15 +36,19 @@ import br.com.sevenbeats.presentation.player.service.DownloadService;
 import br.com.sevenbeats.presentation.player.service.MusicBinder;
 import br.com.sevenbeats.presentation.player.service.MusicService;
 import br.com.sevenbeats.utils.annotation.MvcPattern;
-import br.com.sevenbeats.utils.mvc.interfaces.view.OnAdapterItemClickListener;
+import br.com.sevenbeats.utils.mvc.interfaces.view.OnAdapterOptionItemClickListener;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-@MvcPattern("Presenter") public class PlayerActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, OnAdapterItemClickListener {
-    private MusicBinder musicBinder;
+@MvcPattern("Presenter") public class PlayerActivity extends AppCompatActivity implements OnAdapterOptionItemClickListener, SeekBar.OnSeekBarChangeListener {
+
+    public boolean created;
+    public boolean started;
+    public boolean serviceConnected;
+
+    public MusicBinder musicBinder;
+    private Song mCurrentSelectedSong;
     private PlayerController mPlayerController;
-    public static String EXTRA_SONG_ID = "id";
-    public static String EXTRA_PLAYLIST = "playlist";
 
     @InjectView(R.id.next) ImageButton mNext;
     @InjectView(R.id.song_name) TextView mSong;
@@ -83,27 +87,36 @@ import butterknife.OnClick;
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
         bindService(intent, musicConnection, Context.BIND_AUTO_CREATE);
+
+        created = true;
     }
+
 
     private boolean hasExtras(String extraName){
         if(getIntent() == null)
             throw new NullPointerException("PlayerActivity must have a unique song or a playlist");
 
-        if(extraName.equals(EXTRA_SONG_ID)){
+        if(extraName.equals(PlayerConstants.EXTRA_SONG_ID)){
             return getIntent().hasExtra(extraName);
-        }else if(extraName.equals(EXTRA_PLAYLIST)){
-            return getIntent().hasExtra(EXTRA_PLAYLIST);
+        }else if(extraName.equals(PlayerConstants.EXTRA_PLAYLIST)){
+            return getIntent().hasExtra(PlayerConstants.EXTRA_PLAYLIST);
         }
 
         return false;
     }
 
     private String getExtrasSongId(){
-        return getIntent().getExtras().getString(EXTRA_SONG_ID);
+        return getIntent().getExtras().getString(PlayerConstants.EXTRA_SONG_ID);
     }
 
     private ArrayList<Song> getExtraPlayList(){
-        return getIntent().getExtras().getParcelableArrayList(EXTRA_PLAYLIST);
+        ArrayList<Song> songs = null;
+
+        if(getIntent().hasExtra(PlayerConstants.EXTRA_PLAYLIST)){
+            songs =getIntent().getExtras().getParcelableArrayList(PlayerConstants.EXTRA_PLAYLIST);
+        }
+
+        return songs;
     }
 
     @Override protected void onStart() {
@@ -113,6 +126,7 @@ import butterknife.OnClick;
 
     @Override protected void onResume() {
         super.onResume();
+        started = true;
     }
 
     @Override protected void onDestroy() {
@@ -160,26 +174,8 @@ import butterknife.OnClick;
         mQueue.setVisibility(mQueue.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
     }
 
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-        if(fromUser){
-            musicBinder.changeMediaPlayerPosition(position);
-            seekBar.setProgress(position);
-        }
-
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
-
     private void changePLayPause(boolean playing){
+
         mPlayPause.setImageResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);
     }
 
@@ -230,23 +226,22 @@ import butterknife.OnClick;
     private void setSongChanged(){
         mSong.setText(musicBinder.getCurrentSong().getName());
         mArtist.setText(musicBinder.getCurrentSong().getArtist());
+        Picasso.with(this).load(musicBinder.getCurrentSong().getAlbum().getImageUrl()).placeholder(R.drawable.placeholder).into(mCover);
     }
 
-
     private void setBufferUpdate(int bufferUpdate){
+        System.out.println(musicBinder.getPlayer().getDuration() / 1000);
+        mSeekBar.setMax(musicBinder.getPlayer().getDuration() / 1000);
         mSeekBar.setProgress(bufferUpdate);
+        mTimer.setText(convertSecondsToText(bufferUpdate));
+    }
 
-        if(bufferUpdate <= 60){
-
-            if(bufferUpdate <= 9){
-                mTimer.setText("00:0" + bufferUpdate);
-            }else{
-                mTimer.setText("00:" + bufferUpdate);
-            }
-
-        }else{
-            mTimer.setText(bufferUpdate + "");
-        }
+    private String convertSecondsToText(int time) {
+        int minutes = (int) Math.floor(time / 60f);
+        String strMinutes = minutes < 10 ? "0" + minutes : String.valueOf(minutes);
+        int seconds = time % 60;
+        String strSeconds = seconds < 10 ? "0" + seconds : String.valueOf(seconds);
+        return strMinutes + ":" + strSeconds;
     }
 
     private void setShuffleEnabled(boolean enabled){
@@ -255,31 +250,8 @@ import butterknife.OnClick;
 
     private void notifySongChanged(){
         setSongChanged();
-        mSeekBar.setMax(musicBinder.getPlayer().getDuration());
         changePLayPause(musicBinder.getPlayer().isPlaying());
-        Picasso.with(this).load(musicBinder.getCurrentSong().getAlbum().getImageUrl()).into(mCover);
     }
-
-    private ServiceConnection musicConnection = new ServiceConnection() {
-
-        @Override public void onServiceConnected(ComponentName name, IBinder service) {
-            musicBinder = (MusicBinder) service;
-
-            if(hasExtras(EXTRA_SONG_ID)){
-                mPlayerController.onRequest(PlayerConstants.METHOD_ON_SONGS, getExtrasSongId());
-            }else{
-                if(getExtraPlayList() == null){
-                    throw new NullPointerException("You must set a song or playlist");
-                }
-
-                onSongs(getExtraPlayList());
-            }
-        }
-
-        @Override public void onServiceDisconnected(ComponentName name) {
-        }
-    };
-
 
     @SuppressWarnings("unused")
     public  void onError(){
@@ -306,6 +278,82 @@ import butterknife.OnClick;
         setPreviousEnabled(prepared);
         setPlayPauseEnabled(prepared);
     }
+
+    @Override
+    public void onBackPressed() {
+        if(mQueue.getVisibility() == View.VISIBLE){
+            mQueue.setVisibility(View.INVISIBLE);
+        }else{
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add("DOWNLOAD");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if(item.getTitle() == "DOWNLOAD"){
+            Intent intent = new Intent(this, DownloadService.class);
+            intent.putExtra(PlayerConstants.extraUrl, mCurrentSelectedSong.getUrl());
+            intent.putExtra(PlayerConstants.extraFileName, mCurrentSelectedSong.getName());
+            startService(intent);
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(Object data, int position) {
+        if (data instanceof Song){
+            musicBinder.setCurrentTrack(position);
+        }
+    }
+
+    @Override
+    public void onOptionItemClick(Object data, int position) {
+        if (data instanceof Song){
+            mQueue.showContextMenu();
+            mCurrentSelectedSong = (Song) data;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+
+        return true;
+    }
+
+    private ServiceConnection musicConnection = new ServiceConnection() {
+
+        @Override public void onServiceConnected(ComponentName name, IBinder service) {
+            musicBinder = (MusicBinder) service;
+
+            if(hasExtras(PlayerConstants.EXTRA_SONG_ID)){
+                mPlayerController.onRequest(PlayerConstants.METHOD_ON_SONGS, getExtrasSongId());
+            }else{
+                if(getExtraPlayList() == null){
+//                    throw new NullPointerException("You must set a song or playlist");
+                    //nao adiciona nenhuma playlist
+                }else{
+                    onSongs(getExtraPlayList());
+                }
+
+            }
+
+            serviceConnected = true;
+        }
+
+        @Override public void onServiceDisconnected(ComponentName name) {
+        }
+    };
 
     private BroadcastReceiver musicViewUpdaterBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -345,34 +393,21 @@ import butterknife.OnClick;
     };
 
     @Override
-    public void onBackPressed() {
-        if(mQueue.getVisibility() == View.VISIBLE){
-            mQueue.setVisibility(View.INVISIBLE);
-        }else{
-            super.onBackPressed();
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+        if(b) {
+            seekBar.setProgress(i);
+            mTimer.setText(convertSecondsToText(i));
+            musicBinder.getPlayer().seekTo(i * 1000);
         }
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        menu.add("DOWNLOAD");
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        if(item.getTitle() == "DOWNLOAD"){
-            Intent intent = new Intent(this, DownloadService.class);
-            intent.putExtra("downloadUrl", "http://69.28.84.155/public/musicas/kendrick_lamar_the_art_of_peer_pressure.mp3" );
-            startService(intent);
-        }
+    public void onStopTrackingTouch(SeekBar seekBar) {
 
-        return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public void onItemClick(Object data, int position) {
-        if (data instanceof Song){
-            mQueue.showContextMenu();
-        }
     }
 }

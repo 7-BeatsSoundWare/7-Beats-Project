@@ -14,7 +14,7 @@ import java.util.List;
 
 import br.com.sevenbeats.R;
 import br.com.sevenbeats.core.song.Song;
-import br.com.sevenbeats.utils.mvc.interfaces.view.OnAdapterItemClickListener;
+import br.com.sevenbeats.utils.mvc.interfaces.view.OnAdapterOptionItemClickListener;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -24,8 +24,8 @@ import butterknife.InjectView;
 public class QueueAdapter extends RecyclerView.Adapter {
 
     private List<Song> songs;
-    private OnAdapterItemClickListener listener;
-    public void setData(List<Song> data, OnAdapterItemClickListener listener){
+    private OnAdapterOptionItemClickListener listener;
+    public void setData(List<Song> data, OnAdapterOptionItemClickListener listener){
         this.songs = data;
         this.listener = listener;
         notifyDataSetChanged();
@@ -43,6 +43,7 @@ public class QueueAdapter extends RecyclerView.Adapter {
         queueHolder.artist.setText(song.getArtist());
         queueHolder.songName.setText(song.getName());
         queueHolder.options.setOnClickListener(new CustomClickListener(listener, song, position));
+        queueHolder.songBtn.setOnClickListener(new CustomClickListener(listener, song, position));
         Picasso.with(queueHolder.itemView.getContext()).load(song.getAlbum().getImageUrl()).into(queueHolder.cover);
     }
 
@@ -50,9 +51,9 @@ public class QueueAdapter extends RecyclerView.Adapter {
 
         private Song song;
         private int position;
-        private OnAdapterItemClickListener listener;
+        private OnAdapterOptionItemClickListener listener;
 
-        public CustomClickListener(OnAdapterItemClickListener listener, Song song, int position){
+        public CustomClickListener(OnAdapterOptionItemClickListener listener, Song song, int position){
             this.song = song;
             this.position = position;
             this.listener = listener;
@@ -60,7 +61,11 @@ public class QueueAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            this.listener.onItemClick(song, position);
+            if(view.getId() == R.id.queue_play_btn) {
+                this.listener.onItemClick(song, position);
+            }else {
+                this.listener.onOptionItemClick(song, position);
+            }
         }
     }
 
@@ -72,6 +77,7 @@ public class QueueAdapter extends RecyclerView.Adapter {
     public class QueueHolder extends RecyclerView.ViewHolder{
         @InjectView(R.id.queue_song) TextView songName;
         @InjectView(R.id.queue_artist) TextView artist;
+        @InjectView(R.id.queue_play_btn) ImageButton songBtn;
         @InjectView(R.id.queue_album_cover) ImageView cover;
         @InjectView(R.id.queue_options) ImageButton options;
 

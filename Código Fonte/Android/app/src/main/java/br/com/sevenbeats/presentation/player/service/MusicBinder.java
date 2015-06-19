@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,11 @@ import br.com.sevenbeats.core.song.Song;
 
 public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
+    //TESTE
+    public boolean playing;
+    //ENDTESTE
+
+    public int oldIndex;
     private Song oldSong;
     private Handler handler;
     private Context context;
@@ -42,17 +46,23 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         return player;
     }
 
+    public boolean isValidPlaylist(List<Song> songs){
+        return songs != null && songs.size() != 0;
+    }
+
     public void setPlayList(List<Song> songs){
         this.songs = songs;
     }
 
     public void next(){
-        setCurrentTrack(getCurrentTrack() + (getCurrentTrack() == (songs.size() -1) ? 0 : 1 ));
+        oldIndex = getCurrentSongIndex();
+        setCurrentTrack(getCurrentSongIndex() + (getCurrentSongIndex() == (songs.size() -1) ? 0 : 1 ));
         setState(NEXT);
     }
 
     public void prev(){
-        setCurrentTrack(getCurrentTrack() == 0 ? (songs.size() - 1) : (getCurrentTrack() - 1));
+        oldIndex = getCurrentSongIndex();
+        setCurrentTrack(getCurrentSongIndex() == 0 ? (songs.size() - 1) : (getCurrentSongIndex() - 1));
         setState(PREVIOUS);
     }
 
@@ -75,16 +85,21 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     /**
      * CSU 2.1 - Iniciar música
      * */
-    public void play(){
+    public boolean play(){
+        boolean success;
         try {
             player.reset();
             player.setDataSource(getCurrentSong().getUrl());
             player.prepareAsync();
             oldSong = getCurrentSong();
             setState(PLAY, LOADING_ENABLED);
-        } catch (IOException e) {
+            success = true;
+        } catch (Exception e){
             e.printStackTrace();
+            success = false;
         }
+
+        return success;
     }
 
     /**
@@ -106,7 +121,6 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         handler.post(bufferingUpdateRunnable);
     }
 
-
     /**
      * CSU 5 Embaralhar músicas
      * */
@@ -120,10 +134,6 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         }
 
         setState(SHUFFLE);
-    }
-
-    public void changeMediaPlayerPosition(int position){
-        player.seekTo(position);
     }
 
     private void saveListActualState(){
@@ -143,7 +153,11 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
         play();
     }
 
-    public int getCurrentTrack(){
+
+    public void setCurrentSongIndex(int index){
+        this.currentTrack = index;
+    }
+    public int getCurrentSongIndex(){
         return currentTrack;
     }
 
@@ -167,12 +181,14 @@ public class MusicBinder extends Binder implements MediaPlayer.OnBufferingUpdate
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
+        playing = true;
         handler.post(bufferingUpdateRunnable);
         setState(PLAY, LOADING_DISABLED);
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        playing = false;
         setState(ERROR);
         return false;
     }
